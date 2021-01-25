@@ -1,244 +1,97 @@
 package charts;
 
-/* ....Show License.... */
- 
+import java.io.IOException;
+
 import javafx.application.Application;
-import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
-import javafx.geometry.Side;
-import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.control.Button;
-import javafx.scene.control.CheckBox;
-import javafx.scene.control.Label;
-import javafx.scene.control.RadioButton;
-import javafx.scene.control.Tab;
 import javafx.scene.control.TabPane;
-import javafx.scene.control.TabPane.TabClosingPolicy;
-import javafx.scene.control.ToggleGroup;
-import javafx.scene.control.Tooltip;
-import javafx.scene.image.Image;
-import javafx.scene.image.ImageView;
-import javafx.scene.layout.Region;
-import javafx.scene.layout.StackPane;
+import javafx.scene.control.Tab;
+import javafx.scene.control.Label;
+import javafx.scene.control.Button;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
+import javafx.scene.chart.PieChart;
+import javafx.scene.chart.NumberAxis;
+import javafx.scene.chart.ScatterChart;
+import javafx.scene.chart.XYChart;
+import javafx.scene.chart.BarChart;
+import javafx.scene.chart.CategoryAxis;
 
-import java.io.IOException;
-import java.io.InputStream;
-import java.util.ArrayList;
-import java.util.Arrays;
- 
-/**
- * Some implementations of tabs using the TabPane class.
- */
 public class Main extends Application {
- 
-    private TabPane tabPane;
-    private Tab tab1;
-    private Tab tab2;
-    private Tab tab3;
-    private Tab internalTab;
- 
-    public Parent createContent() {
-        //Each tab illustrates different capabilities
-        tabPane = new TabPane();
-        tabPane.setPrefSize(400, 360);
-        tabPane.setMinSize(TabPane.USE_PREF_SIZE, TabPane.USE_PREF_SIZE);
-        tabPane.setMaxSize(TabPane.USE_PREF_SIZE, TabPane.USE_PREF_SIZE);
-        tab1 = new Tab();
-        tab2 = new Tab();
-        tab3 = new Tab();
-        internalTab = new Tab();
- 
-        tabPane.setRotateGraphic(false);
-        tabPane.setTabClosingPolicy(TabPane.TabClosingPolicy.SELECTED_TAB);
-        tabPane.setSide(Side.TOP);
-        final VBox vbox = new VBox();
-        vbox.setSpacing(10);
-        vbox.setTranslateX(10);
-        vbox.setTranslateY(10);
-        // Initial tab with buttons for experimenting
-        tab1.setText("Tab 1");
-        tab1.setTooltip(new Tooltip("Tab 1 Tooltip"));
-        final InputStream png = getClass().getResourceAsStream("tab_16.png");
-        final Image image = new Image(png);
-        tab1.setGraphic(new ImageView(image));
- 
-        setUpControlButtons(vbox);
-        tab1.setContent(vbox);
-        tabPane.getTabs().add(tab1);
-        // Tab2 has longer label and toggles tab closing
-        tab2.setText("Longer Tab");
-        final VBox vboxLongTab = new VBox();
-        vboxLongTab.setSpacing(10);
-        vboxLongTab.setTranslateX(10);
-        vboxLongTab.setTranslateY(10);
- 
-        Label explainRadios = new Label("Closing policy for tabs:");
-        vboxLongTab.getChildren().add(explainRadios);
-        ToggleGroup closingPolicy = new ToggleGroup();
- 
-        for (TabClosingPolicy policy : TabClosingPolicy.values()) {
-            final RadioButton radioButton = new RadioButton(policy.name());
-            radioButton.setMnemonicParsing(false);
-            radioButton.setToggleGroup(closingPolicy);
-            radioButton.setOnAction((ActionEvent event) -> {
-                final TabClosingPolicy radioPolicy =
-                TabClosingPolicy.valueOf(radioButton.getText());
-                tabPane.setTabClosingPolicy(radioPolicy);
-            });
-            if (policy.name().equals(TabClosingPolicy.SELECTED_TAB.name())) {
-                radioButton.setSelected(true);
-            }
-            vboxLongTab.getChildren().add(radioButton);
-        }
-        tab2.setContent(vboxLongTab);
-        tabPane.getTabs().add(tab2);
-        // Tab 3 has a checkbox for showing/hiding tab labels
-        tab3.setText("Tab 3");
-        final VBox vboxTab3 = new VBox();
-        vboxTab3.setSpacing(10);
-        vboxTab3.setTranslateX(10);
-        vboxTab3.setTranslateY(10);
- 
-        final CheckBox cb = new CheckBox("Show labels on original tabs");
-        cb.setSelected(true);
-        cb.setOnAction((ActionEvent event) -> {
-            if (cb.isSelected()) {
-                tab1.setText("Tab 1");
-                tab2.setText("Longer Tab");
-                tab3.setText("Tab 3");
-                internalTab.setText("Internal Tabs");
- 
-            } else {
-                tab1.setText("");
-                tab2.setText("");
-                tab3.setText("");
-                internalTab.setText("");
-            }
-        });
-        vboxTab3.getChildren().add(cb);
-        tab3.setContent(vboxTab3);
-        tabPane.getTabs().add(tab3);
-        // Internal Tabs
-        internalTab.setText("Internal Tabs");
-        setupInternalTab();
-        tabPane.getTabs().add(internalTab);
-        return tabPane;
+
+    public static void main(String[] args) {
+        launch(args);
     }
- 
-    private void toggleTabPosition(TabPane tabPane) {
-        Side pos = tabPane.getSide();
-        if (pos == Side.TOP) {
-            tabPane.setSide(Side.RIGHT);
-        } else if (pos == Side.RIGHT) {
-            tabPane.setSide(Side.BOTTOM);
-        } else if (pos == Side.BOTTOM) {
-            tabPane.setSide(Side.LEFT);
-        } else {
-            tabPane.setSide(Side.TOP);
-        }
-    }
- 
-    private void toggleTabMode(TabPane tabPane) {
-        if (!tabPane.getStyleClass().contains(TabPane.STYLE_CLASS_FLOATING)) {
-            tabPane.getStyleClass().add(TabPane.STYLE_CLASS_FLOATING);
-        } else {
-            tabPane.getStyleClass().remove(TabPane.STYLE_CLASS_FLOATING);
-        }
-    }
- 
-    private void setupInternalTab() {
-        StackPane internalTabContent = new StackPane();
-        final TabPane internalTabPane = new TabPane();
-        internalTabPane.getStyleClass().add(TabPane.STYLE_CLASS_FLOATING);
-        internalTabPane.setSide(Side.LEFT);
- 
-        internalTabPane.setPrefSize(Region.USE_COMPUTED_SIZE,
-                                    Region.USE_COMPUTED_SIZE);
-        final Tab innerTab = new Tab();
-        innerTab.setText("Tab 1");
-        final VBox innerVbox = new VBox();
-        innerVbox.setSpacing(10);
-        innerVbox.setTranslateX(10);
-        innerVbox.setTranslateY(10);
-        Button innerTabPosButton = new Button("Toggle Tab Position");
-        innerTabPosButton.setOnAction((ActionEvent e) -> {
-            toggleTabPosition(internalTabPane);
-        });
-        innerVbox.getChildren().add(innerTabPosButton);
-        {
-            Button innerTabModeButton = new Button("Toggle Tab Mode");
-            innerTabModeButton.setOnAction((ActionEvent e) -> {
-                toggleTabMode(internalTabPane);
-            });
-            innerVbox.getChildren().add(innerTabModeButton);
-        }
-        innerTab.setContent(innerVbox);
-        internalTabPane.getTabs().add(innerTab);
- 
-        for (int i = 1; i < 5; i++) {
-            Tab tab = new Tab();
-            tab.setText("Tab " + i);
-            tab.setContent(new Region());
-            internalTabPane.getTabs().add(tab);
-        }
-        internalTabContent.getChildren().add(internalTabPane);
-        internalTab.setContent(internalTabContent);
-    }
- 
-    private void setUpControlButtons(VBox vbox) {
-        // Toggle style class floating
-        final Button tabModeButton = new Button("Toggle Tab Mode");
-        tabModeButton.setOnAction((ActionEvent e) -> {
-            toggleTabMode(tabPane);
-        });
-        vbox.getChildren().add(tabModeButton);
-        // Tab position
-        final Button tabPositionButton = new Button("Toggle Tab Position");
-        tabPositionButton.setOnAction((ActionEvent e) -> {
-            toggleTabPosition(tabPane);
-        });
-        // Add tab and switch to it
-        final Button newTabButton = new Button("Switch to New Tab");
-        newTabButton.setOnAction((ActionEvent e) -> {
-            Tab t = new Tab("Testing");
-            t.setContent(new Button("Howdy"));
-            tabPane.getTabs().add(t);
-            tabPane.getSelectionModel().select(t);
-        });
-        vbox.getChildren().add(newTabButton);
-        // Add tab
-        final Button addTabButton = new Button("Add Tab");
-        addTabButton.setOnAction((ActionEvent e) -> {
-            Tab t = new Tab("New Tab");
-            t.setContent(new Region());
-            tabPane.getTabs().add(t);
-        });
-        vbox.getChildren().add(addTabButton);
-    }
- 
-    @Override public void start(Stage primaryStage) throws Exception {
-        primaryStage.setScene(new Scene(createContent()));
-        primaryStage.show();
-    }
- 
-    /**
-     * Java main for when running without JavaFX launcher
-     */
-    public static void main(String[] args) throws IOException {
+
+    public void start(Stage primaryStage) throws IOException{
 
         UniversityList universityList = new UniversityList("src/charts/uniData.csv");
-        
-        for (int i = 0; i < universityList.dataSet.size(); i++) {
 
-            System.out.print(universityList.dataSet.get(i).getName() + " ");
-            System.out.println(universityList.dataSet.get(i).getTotalScore());
-      
+        // CREATE PIE CHART
+        PieChart pieChart = new PieChart();
+
+        for (int i = 0; i < universityList.dataSet.size(); i++) {
+            PieChart.Data pieChartData = new PieChart.Data(universityList.dataSet.get(i).getName(), universityList.dataSet.get(i).getTotalScore());
+            pieChart.getData().add(pieChartData);
         }
 
-        launch(args);
+        // CREATE SCATTER CHART
+        NumberAxis xAxis = new NumberAxis();
+        xAxis.setLabel("Total Score");
 
+        NumberAxis yAxis = new NumberAxis();
+        yAxis.setLabel("Number of Students");
+
+        ScatterChart scatterChart = new ScatterChart(xAxis, yAxis);
+
+        for (int i = 0; i < universityList.dataSet.size(); i++) {
+            XYChart.Series scatterChartData = new XYChart.Series();
+            scatterChartData.setName(universityList.dataSet.get(i).getName());
+            scatterChartData.getData().add(new XYChart.Data(universityList.dataSet.get(i).getTotalScore(), universityList.dataSet.get(i).getNumStudents()));
+            scatterChart.getData().add(scatterChartData);
+        }
+
+        CategoryAxis thexAxis = new CategoryAxis();
+        thexAxis.setLabel("Universities");
+
+        NumberAxis theyAxis = new NumberAxis();
+        theyAxis.setLabel("Teaching");
+
+        BarChart barChart = new BarChart(thexAxis, theyAxis);
+        for (int i = 0; i < universityList.dataSet.size(); i++) {
+            XYChart.Series barChartData = new XYChart.Series();
+            //dataSeries1.setName(universityList.dataSet.get(i).getName());
+            barChartData.getData().add(new XYChart.Data(universityList.dataSet.get(i).getName(), universityList.dataSet.get(i).getTeaching()));
+            barChart.getData().add(barChartData);
+        }
+
+        TabPane tabPane = new TabPane();
+
+        Tab tab1 = new Tab("Pie Chart", pieChart);
+        Tab tab2 = new Tab("Scatter Chart", scatterChart);
+        Tab tab3 = new Tab("Bar Chart" , barChart);
+
+
+        Tab tab4 = new Tab();
+        tab4.setText("Tab C");
+        
+        VBox tab4_vBox = new VBox();
+        tab4_vBox.getChildren().addAll(
+              new Label("Test Label"),
+              new Button("Test Button"));
+        tab4.setContent(tab4_vBox);
+
+        tabPane.getTabs().add(tab1);
+        tabPane.getTabs().add(tab2);
+        tabPane.getTabs().add(tab3);
+        tabPane.getTabs().add(tab4);
+
+        VBox vBox = new VBox(tabPane);
+        Scene scene = new Scene(vBox);
+
+        primaryStage.setScene(scene);
+        primaryStage.setTitle("University Data");
+
+        primaryStage.show();
     }
 }

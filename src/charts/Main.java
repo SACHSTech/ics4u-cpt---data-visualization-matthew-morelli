@@ -1,6 +1,6 @@
 package charts;
 
-import java.io.IOException;
+//import java.io.IOException;
 
 import javafx.application.Application;
 import javafx.scene.Scene;
@@ -16,6 +16,14 @@ import javafx.scene.chart.ScatterChart;
 import javafx.scene.chart.XYChart;
 import javafx.scene.chart.BarChart;
 import javafx.scene.chart.CategoryAxis;
+import javafx.scene.control.TableColumn;
+import javafx.scene.control.TableView;
+import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.control.TextField;
+import javafx.scene.layout.HBox;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
+import java.io.*;
 
 public class Main extends Application {
 
@@ -30,27 +38,28 @@ public class Main extends Application {
         // CREATE PIE CHART
         PieChart pieChart = new PieChart();
 
-        for (int i = 0; i < universityList.dataSet.size(); i++) {
+        for (int i = 0; i < 9; i++) {
             PieChart.Data pieChartData = new PieChart.Data(universityList.dataSet.get(i).getName(), universityList.dataSet.get(i).getTotalScore());
             pieChart.getData().add(pieChartData);
         }
 
         // CREATE SCATTER CHART
         NumberAxis xAxis = new NumberAxis();
-        xAxis.setLabel("Total Score");
+        xAxis.setLabel("Number of Students");
 
         NumberAxis yAxis = new NumberAxis();
-        yAxis.setLabel("Number of Students");
+        yAxis.setLabel("Total Score");
 
         ScatterChart scatterChart = new ScatterChart(xAxis, yAxis);
 
-        for (int i = 0; i < universityList.dataSet.size(); i++) {
+        for (int i = 0; i < 10; i++) {
             XYChart.Series scatterChartData = new XYChart.Series();
             scatterChartData.setName(universityList.dataSet.get(i).getName());
-            scatterChartData.getData().add(new XYChart.Data(universityList.dataSet.get(i).getTotalScore(), universityList.dataSet.get(i).getNumStudents()));
+            scatterChartData.getData().add(new XYChart.Data(universityList.dataSet.get(i).getNumStudents(), universityList.dataSet.get(i).getTotalScore()));
             scatterChart.getData().add(scatterChartData);
         }
 
+        // CREATE BAR CHART
         CategoryAxis thexAxis = new CategoryAxis();
         thexAxis.setLabel("Universities");
 
@@ -58,7 +67,7 @@ public class Main extends Application {
         theyAxis.setLabel("Teaching");
 
         BarChart barChart = new BarChart(thexAxis, theyAxis);
-        for (int i = 0; i < universityList.dataSet.size(); i++) {
+        for (int i = 0; i < 9; i++) {
             XYChart.Series barChartData = new XYChart.Series();
             //dataSeries1.setName(universityList.dataSet.get(i).getName());
             barChartData.getData().add(new XYChart.Data(universityList.dataSet.get(i).getName(), universityList.dataSet.get(i).getTeaching()));
@@ -74,11 +83,58 @@ public class Main extends Application {
 
         Tab tab4 = new Tab();
         tab4.setText("Tab C");
+
+        String[] propertyValues = {"worldRank", "name", "country", "teaching", "international", "research", "citations", "income", "totalScore", "numStudents", "studentStaffRatio", "internationalStudents"};
         
+        final ObservableList<University> tableViewData = FXCollections.observableArrayList();
+ 
+        for (int i = 0; i < universityList.dataSet.size(); i++) {
+            String[] rowData = {
+                String.valueOf(universityList.dataSet.get(i).getWorldRank()),
+                universityList.dataSet.get(i).getName(),
+                universityList.dataSet.get(i).getCountry(),
+                String.valueOf(universityList.dataSet.get(i).getTeaching()),
+                String.valueOf(universityList.dataSet.get(i).getInternational()),
+                String.valueOf(universityList.dataSet.get(i).getResearch()),
+                String.valueOf(universityList.dataSet.get(i).getCitations()),
+                String.valueOf(universityList.dataSet.get(i).getIncome()),
+                String.valueOf(universityList.dataSet.get(i).getTotalScore()),
+                //String.valueOf(universityList.dataSet.get(i).getNumStudents()),
+                String.valueOf(11111),
+                String.valueOf(universityList.dataSet.get(i).getStudentStaffRatio()),
+                String.valueOf(universityList.dataSet.get(i).getInternationalStudents())
+            };
+            tableViewData.add(new University(rowData));
+        }
+
+        BufferedReader csvFile = new BufferedReader(new FileReader("src/charts/uniData.csv"));
+
+        String line;
+        String[] data;
+
+        line = csvFile.readLine();
+
+        data = line.split(",");
+
+        final TableView tableView = new TableView();
+        tableView.setItems(tableViewData);
+
+        for (int i = 0; i < 11; i++) {
+            TableColumn theColumn = new TableColumn();
+            theColumn.setText(propertyValues[i]);
+            theColumn.setCellValueFactory(new PropertyValueFactory(propertyValues[i]));
+            tableView.getColumns().add(theColumn);
+        }
+
+        TextField textField = new TextField();
+        HBox hbox = new HBox(textField);
+
         VBox tab4_vBox = new VBox();
         tab4_vBox.getChildren().addAll(
-              new Label("Test Label"),
-              new Button("Test Button"));
+            hbox,
+            tableView);
+            //new Label("Test Label"),
+            //new Button("Test Button"));
         tab4.setContent(tab4_vBox);
 
         tabPane.getTabs().add(tab1);

@@ -87,22 +87,24 @@ public class Main extends Application {
         String[] propertyValues = {"worldRank", "name", "country", "teaching", "international", "research", "citations", "income", "totalScore", "numStudents", "studentStaffRatio", "internationalStudents"};
         
         final ObservableList<University> tableViewData = FXCollections.observableArrayList();
- 
+
+        String parameter = "research";
+
         for (int i = 0; i < universityList.dataSet.size(); i++) {
             String[] rowData = {
-                String.valueOf(universityList.dataSet.get(i).getWorldRank()),
-                universityList.dataSet.get(i).getName(),
-                universityList.dataSet.get(i).getCountry(),
-                String.valueOf(universityList.dataSet.get(i).getTeaching()),
-                String.valueOf(universityList.dataSet.get(i).getInternational()),
-                String.valueOf(universityList.dataSet.get(i).getResearch()),
-                String.valueOf(universityList.dataSet.get(i).getCitations()),
-                String.valueOf(universityList.dataSet.get(i).getIncome()),
-                String.valueOf(universityList.dataSet.get(i).getTotalScore()),
+                String.valueOf(universityList.selectionSortUniversities(universityList.dataSet, parameter).get(i).getWorldRank()),
+                universityList.selectionSortUniversities(universityList.dataSet, parameter).get(i).getName(),
+                universityList.selectionSortUniversities(universityList.dataSet, parameter).get(i).getCountry(),
+                String.valueOf(universityList.selectionSortUniversities(universityList.dataSet, parameter).get(i).getTeaching()),
+                String.valueOf(universityList.selectionSortUniversities(universityList.dataSet, parameter).get(i).getInternational()),
+                String.valueOf(universityList.selectionSortUniversities(universityList.dataSet, parameter).get(i).getResearch()),
+                String.valueOf(universityList.selectionSortUniversities(universityList.dataSet, parameter).get(i).getCitations()),
+                String.valueOf(universityList.selectionSortUniversities(universityList.dataSet, parameter).get(i).getIncome()),
+                String.valueOf(universityList.selectionSortUniversities(universityList.dataSet, parameter).get(i).getTotalScore()),
                 //String.valueOf(universityList.dataSet.get(i).getNumStudents()),
                 String.valueOf(11111),
-                String.valueOf(universityList.dataSet.get(i).getStudentStaffRatio()),
-                String.valueOf(universityList.dataSet.get(i).getInternationalStudents())
+                String.valueOf(universityList.selectionSortUniversities(universityList.dataSet, parameter).get(i).getStudentStaffRatio()),
+                String.valueOf(universityList.selectionSortUniversities(universityList.dataSet, parameter).get(i).getInternationalStudents())
             };
             tableViewData.add(new University(rowData));
         }

@@ -2,7 +2,8 @@ package charts;
 
 public class University {
     
-    private int worldRank;
+    // made all numebers doubles in order to have only one sort method
+    private double worldRank;
     private String name;
     private String country;
     // stats
@@ -12,15 +13,13 @@ public class University {
     private double citations;
     private double income;
     private double totalScore;
-    private int numStudents;
+    private double numStudents;
     private double studentStaffRatio;
-    private int internationalStudents;
-    //private int femaleMaleRatio;
+    private double internationalStudents;
 
-    //public University(int theWorldRank, String theName, String theCountry, double theTeaching, double theInternational, double theResearch, double theCitations, double theIncome, double theTotalScore, double theNumStudents, double theStudentStaffRatio, int theInternationalStudents, int theFemaleMaleRatio) {
     public University(String[] data) {
         
-        this.worldRank = Integer.parseInt(data[0]);
+        this.worldRank = Double.parseDouble(data[0]);
         this.name = data[1];
         this.country = data[2];
         this.teaching = Double.parseDouble(data[3]);
@@ -29,29 +28,13 @@ public class University {
         this.citations = Double.parseDouble(data[6]);
         this.income = Double.parseDouble(data[7]);
         this.totalScore = Double.parseDouble(data[8]);
-        this.numStudents = Integer.parseInt(data[9]);
+        this.numStudents = Double.parseDouble(data[9]);
         this.studentStaffRatio = Double.parseDouble(data[10]);
-        this.internationalStudents = Integer.parseInt(data[11]);
-        
-
-        /*
-        this.worldRank = theWorldRank;
-        this.name = theName;
-        this.country = theCountry;
-        this.teaching = theTeaching;
-        this.international = theInternational;
-        this.research = theResearch;
-        this.citations = theCitations;
-        this.income = theIncome;
-        this.totalScore = theTotalScore;
-        this.numStudents = theNumStudents;
-        this.studentStaffRatio = theStudentStaffRatio;
-        this.internationalStudents = theInternationalStudents;
-        this.femaleMaleRatio = theFemaleMaleRatio;*/
+        this.internationalStudents = Double.parseDouble(data[11]);
 
     }
 
-    public int getWorldRank() {
+    public double getWorldRank() {
         return this.worldRank;
     }
 
@@ -95,12 +78,37 @@ public class University {
         return this.studentStaffRatio;
     }
 
-    public int getInternationalStudents() {
+    public double getInternationalStudents() {
         return this.internationalStudents;
     }
-    /*
-    public int getFemaleMaleRatio() {
-        return this.femaleMaleRatio;
-    }*/
+
+    public double getParamater(String paramater) {
+
+        if (paramater.equalsIgnoreCase("teaching")) {
+            return this.teaching;
+        } else if (paramater.equalsIgnoreCase("international")) {
+            return this.international;
+        } else if (paramater.equalsIgnoreCase("research")) {
+            return this.research;
+        } else if (paramater.equalsIgnoreCase("citations")) {
+            return this.citations;
+        } else if (paramater.equalsIgnoreCase("income")) {
+            return this.income;
+        } else if (paramater.equalsIgnoreCase("totalScore")) {
+            return this.totalScore;
+        } else if (paramater.equalsIgnoreCase("numStudents")) {
+            return this.numStudents;
+        } else if (paramater.equalsIgnoreCase("studentStaffRatio")) {
+            return this.studentStaffRatio;
+        } else if (paramater.equalsIgnoreCase("internationalStudents")) {
+            return this.internationalStudents;
+        } else if (paramater.equalsIgnoreCase("worldRank")) {
+            return this.worldRank;
+        }
+
+        return 0.0;
+
+    }
+    
 
 }

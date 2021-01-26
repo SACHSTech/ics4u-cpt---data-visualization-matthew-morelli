@@ -48,9 +48,44 @@ public class Main extends Application {
                 String.valueOf(universityList.selectionSortUniversities(universityList.dataSet, parameter).get(i).getIncome()),
                 String.valueOf(universityList.selectionSortUniversities(universityList.dataSet, parameter).get(i).getTotalScore()),
                 String.valueOf(universityList.dataSet.get(i).getNumStudents()),
-                //String.valueOf(11111),
                 String.valueOf(universityList.selectionSortUniversities(universityList.dataSet, parameter).get(i).getStudentStaffRatio()),
                 String.valueOf(universityList.selectionSortUniversities(universityList.dataSet, parameter).get(i).getInternationalStudents())
+            };
+            tableViewData.add(new University(rowData));
+        }
+
+        TableView tableView = new TableView();
+        tableView.setItems(tableViewData);
+
+        for (int i = 0; i < propertyValues.length; i++) {
+            TableColumn theColumn = new TableColumn();
+            theColumn.setText(propertyValues[i]);
+            theColumn.setCellValueFactory(new PropertyValueFactory(propertyValues[i]));
+            tableView.getColumns().add(theColumn);
+        }
+
+        return tableView;
+
+    }
+
+    public TableView createFilteredTableView(String[] propertyValues, UniversityList universityList, String column, String parameter) {
+
+        ObservableList<University> tableViewData = FXCollections.observableArrayList();
+
+        for (int i = 0; i < universityList.linearSearch(column, parameter).size(); i++) {
+            String[] rowData = {
+                String.valueOf(universityList.linearSearch(column, parameter).get(i).getWorldRank()),
+                universityList.linearSearch(column, parameter).get(i).getName(),
+                universityList.linearSearch(column, parameter).get(i).getCountry(),
+                String.valueOf(universityList.linearSearch(column, parameter).get(i).getTeaching()),
+                String.valueOf(universityList.linearSearch(column, parameter).get(i).getInternational()),
+                String.valueOf(universityList.linearSearch(column, parameter).get(i).getResearch()),
+                String.valueOf(universityList.linearSearch(column, parameter).get(i).getCitations()),
+                String.valueOf(universityList.linearSearch(column, parameter).get(i).getIncome()),
+                String.valueOf(universityList.linearSearch(column, parameter).get(i).getTotalScore()),
+                String.valueOf(universityList.linearSearch(column, parameter).get(i).getNumStudents()),
+                String.valueOf(universityList.linearSearch(column, parameter).get(i).getStudentStaffRatio()),
+                String.valueOf(universityList.linearSearch(column, parameter).get(i).getInternationalStudents())
             };
             tableViewData.add(new University(rowData));
         }
@@ -120,7 +155,7 @@ public class Main extends Application {
 
         // CREATE TABLE VIEW TAB
         Tab tab4 = new Tab();
-        tab4.setText("View ALl Data");
+        tab4.setText("View All Data");
         /*
         BufferedReader csvFile = new BufferedReader(new FileReader("src/charts/uniData.csv"));
 
@@ -145,6 +180,7 @@ public class Main extends Application {
         TableView tableView = createTableView(propertyValues, universityList, "worldRank");
 
         Button sortButton = new Button("Sort");
+        Button searchButton = new Button("Search");
 
         sortButton.setOnAction(action -> {
             String parameter = "";
@@ -154,9 +190,22 @@ public class Main extends Application {
             tab4_vBox.getChildren().addAll(
                 hbox,
                 sortButton,
+                searchButton,
                 createTableView(propertyValues, universityList, parameter));
-                //new Label("Test Label"),
-                //new Button("Test Button"));
+            tab4.setContent(tab4_vBox);
+            //tableView = createTableView(propertyValues, universityList, parameter);
+        });
+
+        searchButton.setOnAction(action -> {
+            String[] parameter;
+            parameter = textField.getText().split(",");
+            System.out.println(parameter);
+            VBox tab4_vBox = new VBox();
+            tab4_vBox.getChildren().addAll(
+                hbox,
+                sortButton,
+                searchButton,
+                createFilteredTableView(propertyValues, universityList, parameter[0], parameter[1]));
             tab4.setContent(tab4_vBox);
             //tableView = createTableView(propertyValues, universityList, parameter);
         });
@@ -206,6 +255,7 @@ public class Main extends Application {
         tab4_vBox.getChildren().addAll(
             hbox,
             sortButton,
+            searchButton,
             tableView);
             //new Label("Test Label"),
             //new Button("Test Button"));

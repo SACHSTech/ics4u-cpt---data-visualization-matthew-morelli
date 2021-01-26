@@ -60,4 +60,19 @@ public class UniversityList {
 
     }
 
+    // linear search
+    public ArrayList<University> linearSearch(String column, String parameter) {
+
+        ArrayList<University> arrList = new ArrayList<University>();
+        String element;
+
+        for(int i = 0; i < dataSet.size(); i++) {
+            element = selectionSortUniversities(dataSet, parameter).get(i).getStringParameter(column);
+            if(element.equalsIgnoreCase(parameter)) {
+                arrList.add(dataSet.get(i));
+            }
+        }
+        return arrList;
+   }
+
 }

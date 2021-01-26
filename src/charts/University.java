@@ -109,6 +109,18 @@ public class University {
         return 0.0;
 
     }
+
+    public String getStringParameter(String parameter) {
+
+        if (parameter.equalsIgnoreCase("name")) {
+            return this.name;
+        } else if (parameter.equalsIgnoreCase("country")) {
+            return this.country;
+        }
+
+        return "";
+
+    }
     
 
 }

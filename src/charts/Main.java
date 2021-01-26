@@ -24,11 +24,49 @@ import javafx.scene.layout.HBox;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import java.io.*;
+import java.util.Arrays;
 
 public class Main extends Application {
 
     public static void main(String[] args) {
         launch(args);
+    }
+
+    public TableView createTableView(String[] propertyValues, UniversityList universityList, String parameter) {
+
+        ObservableList<University> tableViewData = FXCollections.observableArrayList();
+
+        for (int i = 0; i < universityList.dataSet.size(); i++) {
+            String[] rowData = {
+                String.valueOf(universityList.selectionSortUniversities(universityList.dataSet, parameter).get(i).getWorldRank()),
+                universityList.selectionSortUniversities(universityList.dataSet, parameter).get(i).getName(),
+                universityList.selectionSortUniversities(universityList.dataSet, parameter).get(i).getCountry(),
+                String.valueOf(universityList.selectionSortUniversities(universityList.dataSet, parameter).get(i).getTeaching()),
+                String.valueOf(universityList.selectionSortUniversities(universityList.dataSet, parameter).get(i).getInternational()),
+                String.valueOf(universityList.selectionSortUniversities(universityList.dataSet, parameter).get(i).getResearch()),
+                String.valueOf(universityList.selectionSortUniversities(universityList.dataSet, parameter).get(i).getCitations()),
+                String.valueOf(universityList.selectionSortUniversities(universityList.dataSet, parameter).get(i).getIncome()),
+                String.valueOf(universityList.selectionSortUniversities(universityList.dataSet, parameter).get(i).getTotalScore()),
+                String.valueOf(universityList.dataSet.get(i).getNumStudents()),
+                //String.valueOf(11111),
+                String.valueOf(universityList.selectionSortUniversities(universityList.dataSet, parameter).get(i).getStudentStaffRatio()),
+                String.valueOf(universityList.selectionSortUniversities(universityList.dataSet, parameter).get(i).getInternationalStudents())
+            };
+            tableViewData.add(new University(rowData));
+        }
+
+        TableView tableView = new TableView();
+        tableView.setItems(tableViewData);
+
+        for (int i = 0; i < propertyValues.length; i++) {
+            TableColumn theColumn = new TableColumn();
+            theColumn.setText(propertyValues[i]);
+            theColumn.setCellValueFactory(new PropertyValueFactory(propertyValues[i]));
+            tableView.getColumns().add(theColumn);
+        }
+
+        return tableView;
+
     }
 
     public void start(Stage primaryStage) throws IOException{
@@ -80,16 +118,52 @@ public class Main extends Application {
         Tab tab2 = new Tab("Scatter Chart", scatterChart);
         Tab tab3 = new Tab("Bar Chart" , barChart);
 
-
+        // CREATE TABLE VIEW TAB
         Tab tab4 = new Tab();
-        tab4.setText("Tab C");
+        tab4.setText("View ALl Data");
+        /*
+        BufferedReader csvFile = new BufferedReader(new FileReader("src/charts/uniData.csv"));
+
+        String line;
+        String[] propertyValues;
+
+        line = csvFile.readLine();
+        csvFile.close();
+
+        propertyValues = line.split(",");
+
+        //System.out.println(Arrays.toString(propertyValues));
+        for (int i = 0; i < propertyValues.length; i++) {
+            System.out.println(propertyValues[i]);
+        }*/
 
         String[] propertyValues = {"worldRank", "name", "country", "teaching", "international", "research", "citations", "income", "totalScore", "numStudents", "studentStaffRatio", "internationalStudents"};
         
-        final ObservableList<University> tableViewData = FXCollections.observableArrayList();
+        TextField textField = new TextField();
+        HBox hbox = new HBox(textField);
 
-        String parameter = "research";
+        TableView tableView = createTableView(propertyValues, universityList, "worldRank");
 
+        Button sortButton = new Button("Sort");
+
+        sortButton.setOnAction(action -> {
+            String parameter = "";
+            parameter = textField.getText();
+            System.out.println(parameter);
+            VBox tab4_vBox = new VBox();
+            tab4_vBox.getChildren().addAll(
+                hbox,
+                sortButton,
+                createTableView(propertyValues, universityList, parameter));
+                //new Label("Test Label"),
+                //new Button("Test Button"));
+            tab4.setContent(tab4_vBox);
+            //tableView = createTableView(propertyValues, universityList, parameter);
+        });
+
+        //final ObservableList<University> tableViewData = FXCollections.observableArrayList();
+
+        /*
         for (int i = 0; i < universityList.dataSet.size(); i++) {
             String[] rowData = {
                 String.valueOf(universityList.selectionSortUniversities(universityList.dataSet, parameter).get(i).getWorldRank()),
@@ -108,7 +182,7 @@ public class Main extends Application {
             };
             tableViewData.add(new University(rowData));
         }
-
+        
         BufferedReader csvFile = new BufferedReader(new FileReader("src/charts/uniData.csv"));
 
         String line;
@@ -126,23 +200,24 @@ public class Main extends Application {
             theColumn.setText(propertyValues[i]);
             theColumn.setCellValueFactory(new PropertyValueFactory(propertyValues[i]));
             tableView.getColumns().add(theColumn);
-        }
-
-        TextField textField = new TextField();
-        HBox hbox = new HBox(textField);
+        }*/
 
         VBox tab4_vBox = new VBox();
         tab4_vBox.getChildren().addAll(
             hbox,
+            sortButton,
             tableView);
             //new Label("Test Label"),
             //new Button("Test Button"));
         tab4.setContent(tab4_vBox);
+    
 
         tabPane.getTabs().add(tab1);
         tabPane.getTabs().add(tab2);
         tabPane.getTabs().add(tab3);
         tabPane.getTabs().add(tab4);
+
+        
 
         VBox vBox = new VBox(tabPane);
         Scene scene = new Scene(vBox);

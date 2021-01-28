@@ -1,7 +1,5 @@
 package charts;
 
-//import java.io.IOException;
-
 import javafx.application.Application;
 import javafx.scene.Scene;
 import javafx.scene.control.TabPane;
@@ -24,32 +22,51 @@ import javafx.scene.layout.HBox;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import java.io.*;
-import java.util.Arrays;
+import java.text.DecimalFormat;;
 
+/**
+ * A program Main.java that lets you view graphs about top global universities, and also lets you
+ * search through and filter all the data.
+ * @author Matthre Morelli
+ */
 public class Main extends Application {
 
+    /**
+     * Runs the program
+     * 
+     * @param args  Required paramater to run
+     */
     public static void main(String[] args) {
         launch(args);
     }
 
+    /**
+     * Creates a sorted table view of the university data
+     * 
+     * @param propertyValues  The column header text
+     * @param universityList  The UniversityList object
+     * @param parameter  The paramater to be sorted by
+     * @return  The sorted table view
+     * @author Matthew Morelli
+     */
     public TableView createTableView(String[] propertyValues, UniversityList universityList, String parameter) {
 
         ObservableList<University> tableViewData = FXCollections.observableArrayList();
 
         for (int i = 0; i < universityList.dataSet.size(); i++) {
             String[] rowData = {
-                String.valueOf(universityList.selectionSortUniversities(universityList.dataSet, parameter).get(i).getWorldRank()),
-                universityList.selectionSortUniversities(universityList.dataSet, parameter).get(i).getName(),
-                universityList.selectionSortUniversities(universityList.dataSet, parameter).get(i).getCountry(),
-                String.valueOf(universityList.selectionSortUniversities(universityList.dataSet, parameter).get(i).getTeaching()),
-                String.valueOf(universityList.selectionSortUniversities(universityList.dataSet, parameter).get(i).getInternational()),
-                String.valueOf(universityList.selectionSortUniversities(universityList.dataSet, parameter).get(i).getResearch()),
-                String.valueOf(universityList.selectionSortUniversities(universityList.dataSet, parameter).get(i).getCitations()),
-                String.valueOf(universityList.selectionSortUniversities(universityList.dataSet, parameter).get(i).getIncome()),
-                String.valueOf(universityList.selectionSortUniversities(universityList.dataSet, parameter).get(i).getTotalScore()),
-                String.valueOf(universityList.dataSet.get(i).getNumStudents()),
-                String.valueOf(universityList.selectionSortUniversities(universityList.dataSet, parameter).get(i).getStudentStaffRatio()),
-                String.valueOf(universityList.selectionSortUniversities(universityList.dataSet, parameter).get(i).getInternationalStudents())
+                String.valueOf(universityList.selectionSortUniversities(universityList.dataSet, parameter, false).get(i).getWorldRank()),
+                universityList.selectionSortUniversities(universityList.dataSet, parameter, true).get(i).getName(),
+                universityList.selectionSortUniversities(universityList.dataSet, parameter, true).get(i).getCountry(),
+                String.valueOf(universityList.selectionSortUniversities(universityList.dataSet, parameter, true).get(i).getTeaching()),
+                String.valueOf(universityList.selectionSortUniversities(universityList.dataSet, parameter, true).get(i).getInternational()),
+                String.valueOf(universityList.selectionSortUniversities(universityList.dataSet, parameter, true).get(i).getResearch()),
+                String.valueOf(universityList.selectionSortUniversities(universityList.dataSet, parameter, true).get(i).getCitations()),
+                String.valueOf(universityList.selectionSortUniversities(universityList.dataSet, parameter, true).get(i).getIncome()),
+                String.valueOf(universityList.selectionSortUniversities(universityList.dataSet, parameter, true).get(i).getTotalScore()),
+                String.valueOf(universityList.selectionSortUniversities(universityList.dataSet, parameter, true).get(i).getNumStudents()),
+                String.valueOf(universityList.selectionSortUniversities(universityList.dataSet, parameter, true).get(i).getStudentStaffRatio()),
+                String.valueOf(universityList.selectionSortUniversities(universityList.dataSet, parameter, true).get(i).getInternationalStudents())
             };
             tableViewData.add(new University(rowData));
         }
@@ -68,6 +85,16 @@ public class Main extends Application {
 
     }
 
+    /**
+     * Creates a filtered table view
+     * 
+     * @param propertyValues  The column header text
+     * @param universityList  The UniversityList object
+     * @param column  The column to filter by
+     * @param parameter  The paramater to filter by
+     * @return  The filtered table view
+     * @author Matthew Morelli
+     */
     public TableView createFilteredTableView(String[] propertyValues, UniversityList universityList, String column, String parameter) {
 
         ObservableList<University> tableViewData = FXCollections.observableArrayList();
@@ -103,7 +130,208 @@ public class Main extends Application {
         return tableView;
 
     }
+    /*
+    public TableView createSummaryTableView(String[] propertyValues, UniversityList universityList) {
 
+        ObservableList<String> tableViewData = FXCollections.observableArrayList();
+        String[] rowHeaders = {"Max/Min", "Average", "Median", "Standard Deviation"};
+
+        for (int i = 0; i < propertyValues.length; i++) {
+    
+            tableViewData.add(propertyValues[i]);
+            tableViewData.add(universityList.getMaxMin(propertyValues[i]));
+            tableViewData.add(String.valueOf(universityList.getAverage(propertyValues[i])));
+            tableViewData.add(String.valueOf(universityList.getMedian(propertyValues[i])));
+            tableViewData.add(String.valueOf(universityList.getStandardDeviation(propertyValues[i])));
+
+        }
+
+        TableView tableView = new TableView();
+        tableView.setItems(tableViewData);
+
+        for (int i = 0; i < rowHeaders.length; i++) {
+            TableColumn theColumn = new TableColumn();
+            theColumn.setText(rowHeaders[i]);
+            theColumn.setCellValueFactory(new PropertyValueFactory(rowHeaders[i]));
+            tableView.getColumns().add(theColumn);
+            
+        }
+
+        return tableView;
+
+    }*/
+
+    /**
+     * Creates the vertical box containing all the labels for different information about the data
+     * @param universityList  The UniversityList class in order to access its methods
+     * @return The VBox containing all the labels
+     * @author Matthew Morelli
+     */
+    public VBox createLabels(UniversityList universityList) {
+        VBox theBox = new VBox();
+        Label count = new Label("Number of Universities: " + universityList.getCount());
+
+        DecimalFormat decimalFormat = new DecimalFormat("#.##");
+
+        Label worldRankLabel = new Label("World Rank Info:");
+        Label maxMin = new Label(universityList.getMaxMin("worldRank") + "     ");
+        Label average = new Label("Average: " + decimalFormat.format(universityList.getAverage("worldRank")) + "     ");
+        Label median = new Label("Median: " + universityList.getMedian("worldRank") + "     ");
+        Label sd = new Label("Standard Deviation: " + decimalFormat.format(universityList.getStandardDeviation("worldRank")));
+        HBox worldRank = new HBox();
+        worldRank.getChildren().addAll(
+            maxMin,
+            average,
+            median,
+            sd
+        );
+
+        Label teachingLabel = new Label("Teaching Info:");
+        Label maxMinTeaching = new Label(universityList.getMaxMin("teaching") + "     ");
+        Label averageTeaching = new Label("Average: " + decimalFormat.format(universityList.getAverage("teaching")) + "     ");
+        Label medianTeaching = new Label("Median: " + universityList.getMedian("teaching") + "     ");
+        Label sdTeaching = new Label("Standard Deviation: " + decimalFormat.format(universityList.getStandardDeviation("teaching")));
+        HBox teaching = new HBox();
+        teaching.getChildren().addAll(
+            maxMinTeaching,
+            averageTeaching,
+            medianTeaching,
+            sdTeaching
+        );
+
+        Label internationalLabel = new Label("International Info:");
+        Label maxMinInternational = new Label(universityList.getMaxMin("international") + "     ");
+        Label averageInternational = new Label("Average: " + decimalFormat.format(universityList.getAverage("international")) + "     ");
+        Label medianInternational = new Label("Median: " + decimalFormat.format(universityList.getMedian("international")) + "     ");
+        Label sdInternational = new Label("Standard Deviation: " + decimalFormat.format(universityList.getStandardDeviation("international")));
+        HBox international = new HBox();
+        international.getChildren().addAll(
+            maxMinInternational,
+            averageInternational,
+            medianInternational,
+            sdInternational
+        );
+
+        Label researchLabel = new Label("Research Info:");
+        Label maxMinResearch = new Label(universityList.getMaxMin("research") + "     ");
+        Label averageResearch = new Label("Average: " + decimalFormat.format(universityList.getAverage("research")) + "     ");
+        Label medianResearch = new Label("Median: " + universityList.getMedian("research") + "     ");
+        Label sdResearch = new Label("Standard Deviation: " + decimalFormat.format(universityList.getStandardDeviation("research")));
+        HBox research = new HBox();
+        research.getChildren().addAll(
+            maxMinResearch,
+            averageResearch,
+            medianResearch,
+            sdResearch
+        );
+
+        Label citationsLabel = new Label("Citations Info:");
+        Label maxMinCitations = new Label(universityList.getMaxMin("citations") + "     ");
+        Label averageCitations = new Label("Average: " + decimalFormat.format(universityList.getAverage("citations")) + "     ");
+        Label medianCitations = new Label("Median: " + universityList.getMedian("citations") + "     ");
+        Label sdCitations = new Label("Standard Deviation: " + decimalFormat.format(universityList.getStandardDeviation("citations")));
+        HBox citations = new HBox();
+        citations.getChildren().addAll(
+            maxMinCitations,
+            averageCitations,
+            medianCitations,
+            sdCitations
+        );
+
+        Label incomeLabel = new Label("Income Info:");
+        Label maxMinIncome = new Label(universityList.getMaxMin("income") + "     ");
+        Label averageIncome = new Label("Average: " + decimalFormat.format(universityList.getAverage("income")) + "     ");
+        Label medianIncome = new Label("Median: " + universityList.getMedian("income") + "     ");
+        Label sdIncome = new Label("Standard Deviation: " + decimalFormat.format(universityList.getStandardDeviation("income")));
+        HBox income = new HBox();
+        income.getChildren().addAll(
+            maxMinIncome,
+            averageIncome,
+            medianIncome,
+            sdIncome
+        );
+        
+        Label totalScoreLabel = new Label("Total Score Info:");
+        Label maxMinTotalScore = new Label(universityList.getMaxMin("totalScore") + "     ");
+        Label averageTotalScore = new Label("Average: " + decimalFormat.format(universityList.getAverage("totalScore")) + "     ");
+        Label medianTotalScore = new Label("Median: " + universityList.getMedian("totalScore") + "     ");
+        Label sdTotalScore = new Label("Standard Deviation: " + decimalFormat.format(universityList.getStandardDeviation("totalScore")));
+        HBox totalScore = new HBox();
+        totalScore.getChildren().addAll(
+            maxMinTotalScore,
+            averageTotalScore,
+            medianTotalScore,
+            sdTotalScore
+        );
+
+        Label numStudentsLabel = new Label("Number of Students Info:");
+        Label maxMinNumStudents = new Label(universityList.getMaxMin("numStudents") + "     ");
+        Label averageNumStudents = new Label("Average: " + decimalFormat.format(universityList.getAverage("numStudents")) + "     ");
+        Label medianNumStudents = new Label("Median: " + universityList.getMedian("numStudents") + "     ");
+        Label sdNumStudents = new Label("Standard Deviation: " + decimalFormat.format(universityList.getStandardDeviation("numStudents")));
+        HBox numStudents = new HBox();
+        numStudents.getChildren().addAll(
+            maxMinNumStudents,
+            averageNumStudents,
+            medianNumStudents,
+            sdNumStudents
+        );
+
+        Label ssrLabel = new Label("Student Staff Ratio Info:");
+        Label maxMinStudentStaffRatio = new Label(universityList.getMaxMin("studentStaffRatio") + "     ");
+        Label averageStudentStaffRatio = new Label("Average: " + decimalFormat.format(universityList.getAverage("studentStaffRatio")) + "     ");
+        Label medianStudentStaffRatio = new Label("Median: " + universityList.getMedian("studentStaffRatio") + "     ");
+        Label sdStudentStaffRatio = new Label("Standard Deviation: " + decimalFormat.format(universityList.getStandardDeviation("studentStaffRatio")));
+        HBox studentStaffRatio = new HBox();
+        studentStaffRatio.getChildren().addAll(
+            maxMinStudentStaffRatio,
+            averageStudentStaffRatio,
+            medianStudentStaffRatio,
+            sdStudentStaffRatio
+        );
+
+        Label internationalStudentsLabel = new Label("International Students Info:");
+        Label maxMinInternationalStudents = new Label(universityList.getMaxMin("internationalStudents") + "     ");
+        Label averageInternationalStudents = new Label("Average: " + decimalFormat.format(universityList.getAverage("internationalStudents")) + "     ");
+        Label medianInternationalStudents = new Label("Median: " + universityList.getMedian("internationalStudents") + "     ");
+        Label sdInternationalStudents = new Label("Standard Deviation: " + decimalFormat.format(universityList.getStandardDeviation("internationalStudents")));
+        HBox internationalStudents = new HBox();
+        internationalStudents.getChildren().addAll(
+            maxMinInternationalStudents,
+            averageInternationalStudents,
+            medianInternationalStudents,
+            sdInternationalStudents
+        );
+
+        theBox.getChildren().addAll(
+            count,
+            worldRankLabel,
+            worldRank,
+            teachingLabel,
+            teaching,
+            internationalLabel,
+            international,
+            researchLabel,
+            research,
+            citationsLabel,
+            citations,
+            incomeLabel,
+            income,
+            numStudentsLabel,
+            numStudents,
+            ssrLabel,
+            studentStaffRatio,
+            internationalStudentsLabel,
+            internationalStudents
+        );
+        return theBox;
+    }
+
+    /**
+     * Runs the javafx GUI
+     * 
+     * @param primaryStage  The window to be displayed
+     */
     public void start(Stage primaryStage) throws IOException{
 
         UniversityList universityList = new UniversityList("src/charts/uniData.csv");
@@ -142,7 +370,6 @@ public class Main extends Application {
         BarChart barChart = new BarChart(thexAxis, theyAxis);
         for (int i = 0; i < 9; i++) {
             XYChart.Series barChartData = new XYChart.Series();
-            //dataSeries1.setName(universityList.dataSet.get(i).getName());
             barChartData.getData().add(new XYChart.Data(universityList.dataSet.get(i).getName(), universityList.dataSet.get(i).getTeaching()));
             barChart.getData().add(barChartData);
         }
@@ -156,21 +383,6 @@ public class Main extends Application {
         // CREATE TABLE VIEW TAB
         Tab tab4 = new Tab();
         tab4.setText("View All Data");
-        /*
-        BufferedReader csvFile = new BufferedReader(new FileReader("src/charts/uniData.csv"));
-
-        String line;
-        String[] propertyValues;
-
-        line = csvFile.readLine();
-        csvFile.close();
-
-        propertyValues = line.split(",");
-
-        //System.out.println(Arrays.toString(propertyValues));
-        for (int i = 0; i < propertyValues.length; i++) {
-            System.out.println(propertyValues[i]);
-        }*/
 
         String[] propertyValues = {"worldRank", "name", "country", "teaching", "international", "research", "citations", "income", "totalScore", "numStudents", "studentStaffRatio", "internationalStudents"};
         
@@ -193,7 +405,6 @@ public class Main extends Application {
                 searchButton,
                 createTableView(propertyValues, universityList, parameter));
             tab4.setContent(tab4_vBox);
-            //tableView = createTableView(propertyValues, universityList, parameter);
         });
 
         searchButton.setOnAction(action -> {
@@ -207,49 +418,7 @@ public class Main extends Application {
                 searchButton,
                 createFilteredTableView(propertyValues, universityList, parameter[0], parameter[1]));
             tab4.setContent(tab4_vBox);
-            //tableView = createTableView(propertyValues, universityList, parameter);
         });
-
-        //final ObservableList<University> tableViewData = FXCollections.observableArrayList();
-
-        /*
-        for (int i = 0; i < universityList.dataSet.size(); i++) {
-            String[] rowData = {
-                String.valueOf(universityList.selectionSortUniversities(universityList.dataSet, parameter).get(i).getWorldRank()),
-                universityList.selectionSortUniversities(universityList.dataSet, parameter).get(i).getName(),
-                universityList.selectionSortUniversities(universityList.dataSet, parameter).get(i).getCountry(),
-                String.valueOf(universityList.selectionSortUniversities(universityList.dataSet, parameter).get(i).getTeaching()),
-                String.valueOf(universityList.selectionSortUniversities(universityList.dataSet, parameter).get(i).getInternational()),
-                String.valueOf(universityList.selectionSortUniversities(universityList.dataSet, parameter).get(i).getResearch()),
-                String.valueOf(universityList.selectionSortUniversities(universityList.dataSet, parameter).get(i).getCitations()),
-                String.valueOf(universityList.selectionSortUniversities(universityList.dataSet, parameter).get(i).getIncome()),
-                String.valueOf(universityList.selectionSortUniversities(universityList.dataSet, parameter).get(i).getTotalScore()),
-                //String.valueOf(universityList.dataSet.get(i).getNumStudents()),
-                String.valueOf(11111),
-                String.valueOf(universityList.selectionSortUniversities(universityList.dataSet, parameter).get(i).getStudentStaffRatio()),
-                String.valueOf(universityList.selectionSortUniversities(universityList.dataSet, parameter).get(i).getInternationalStudents())
-            };
-            tableViewData.add(new University(rowData));
-        }
-        
-        BufferedReader csvFile = new BufferedReader(new FileReader("src/charts/uniData.csv"));
-
-        String line;
-        String[] data;
-
-        line = csvFile.readLine();
-
-        data = line.split(",");
-
-        final TableView tableView = new TableView();
-        tableView.setItems(tableViewData);
-
-        for (int i = 0; i < 11; i++) {
-            TableColumn theColumn = new TableColumn();
-            theColumn.setText(propertyValues[i]);
-            theColumn.setCellValueFactory(new PropertyValueFactory(propertyValues[i]));
-            tableView.getColumns().add(theColumn);
-        }*/
 
         VBox tab4_vBox = new VBox();
         tab4_vBox.getChildren().addAll(
@@ -257,17 +426,33 @@ public class Main extends Application {
             sortButton,
             searchButton,
             tableView);
-            //new Label("Test Label"),
-            //new Button("Test Button"));
         tab4.setContent(tab4_vBox);
-    
+
+        // CREATE SUMMARY PAGE TAB
+        Tab tab5 = new Tab();
+        tab5.setText("Summary");
+
+        String[] summaryPropertyValues = {"teaching", "international", "research", "citations", "income", "totalScore", "numStudents", "studentStaffRatio", "internationalStudents"};
+
+        //TableView summaryTableView = createSummaryTableView(summaryPropertyValues, universityList);
+        /*
+        Label count = new Label("Count: " + universityList.getCount());
+        Label maxMin = new Label(universityList.getMaxMin("teaching"));
+        Label average = new Label("Average: " + universityList.getAverage("teaching"));
+        Label median = new Label("Median: " + universityList.getMedian("teaching"));
+        Label sd = new Label("Standard Deviation: " + universityList.getStandardDeviation("teaching"));*/
+
+        VBox tab5_vBox = new VBox();
+        tab5_vBox.getChildren().addAll(
+            createLabels(universityList)
+        );
+        tab5.setContent(tab5_vBox);
 
         tabPane.getTabs().add(tab1);
         tabPane.getTabs().add(tab2);
         tabPane.getTabs().add(tab3);
         tabPane.getTabs().add(tab4);
-
-        
+        tabPane.getTabs().add(tab5);
 
         VBox vBox = new VBox(tabPane);
         Scene scene = new Scene(vBox);

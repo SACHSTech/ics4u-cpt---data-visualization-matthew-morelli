@@ -1,5 +1,9 @@
 package charts;
 
+/**
+ * A program University.java that creates a university object with info and stats
+ * @author Matthew Morelli
+ */
 public class University {
     
     // made all numebers doubles in order to have only one sort method
@@ -17,6 +21,12 @@ public class University {
     private double studentStaffRatio;
     private double internationalStudents;
 
+    /**
+     * Creates a University object with all the info and stats
+     * 
+     * @param data  An array of the info and stats for the univeristy
+     * @author Matthew Morelli
+     */
     public University(String[] data) {
         
         this.worldRank = Double.parseDouble(data[0]);
@@ -34,54 +44,133 @@ public class University {
 
     }
 
+    /**
+     * Gets the value of the world rank for the university
+     * 
+     * @return The world rank
+     * @author Matthew Morelli
+     */
     public double getWorldRank() {
         return this.worldRank;
     }
 
+    /**
+     * Gets the value of the world rank for the university
+     * 
+     * @return The university name
+     * @author Matthew Morelli
+     */
     public String getName() {
         return this.name;
     }
 
+    /**
+     * Gets the value of the country for the university
+     * 
+     * @return The country
+     * @author Matthew Morelli
+     */
     public String getCountry() {
         return this.country;
     }
 
+    /**
+     * Gets the value of the teaching stat for the university
+     * 
+     * @return The teaching stat
+     * @author Matthew Morelli
+     */
     public double getTeaching() {
         return this.teaching;
     }
 
+    /**
+     * Gets the value of the international stat for the university
+     * 
+     * @return The international stat
+     * @author Matthew Morelli
+     */
     public double getInternational() {
         return this.international;
     }
 
+    /**
+     * Gets the value of the research stat for the university
+     * 
+     * @return The research stat
+     * @author Matthew Morelli
+     */
     public double getResearch() {
         return this.research;
     }
 
+    /**
+     * Gets the value of the citation stat for the university
+     * 
+     * @return The citation stat
+     * @author Matthew Morelli
+     */
     public double getCitations() {
         return this.citations;
     }
 
+    /**
+     * Gets the value of the income stat for the university
+     * 
+     * @return The income stat
+     * @author Matthew Morelli
+     */
     public double getIncome() {
         return this.income;
     }
 
+    /**
+     * Gets the value of the total score for the university
+     * 
+     * @return The total score
+     * @author Matthew Morelli
+     */
     public double getTotalScore() {
         return this.totalScore;
     }
 
+    /**
+     * Gets the value of the number of students for the university
+     * 
+     * @return The number of students
+     * @author Matthew Morelli
+     */
     public double getNumStudents() {
         return this.numStudents;
     }
 
+    /**
+     * Gets the value of the student staff ratio for the university
+     * 
+     * @return The student staff ratio
+     * @author Matthew Morelli
+     */
     public double getStudentStaffRatio() {
         return this.studentStaffRatio;
     }
 
+    /**
+     * Gets the value of the international students stat for the university
+     * 
+     * @return The international students stat
+     * @author Matthew Morelli
+     */
     public double getInternationalStudents() {
         return this.internationalStudents;
     }
 
+    /**
+     * Gets a double paramater based on what is given
+     * 
+     * @param paramater  The parameater to be returned
+     * @return The chosen paramater
+     * @author Matthew Morelli
+     */
     public double getParamater(String paramater) {
 
         if (paramater.equalsIgnoreCase("teaching")) {
@@ -110,6 +199,13 @@ public class University {
 
     }
 
+    /**
+     * Gets a string paramater based on what is given
+     * 
+     * @param parameter  The paramater to be returned
+     * @return The chosen paramater
+     * @author Matthew Morelli
+     */
     public String getStringParameter(String parameter) {
 
         if (parameter.equalsIgnoreCase("name")) {
@@ -121,6 +217,5 @@ public class University {
         return "";
 
     }
-    
 
 }

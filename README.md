@@ -13,3 +13,7 @@ I selected this data set because since I've been applying to universities, I tho
 data based on univerisities.  It has interesting information and the data is something I am willing to work with and is not boring to me.  It also had a sufficient amount of columns for me to work with, which worked out as well.
 
 ## Demo Videos
+
+[Course Connections Video](https://drive.google.com/file/d/1ISaLPGWWXMa0c0m-SE8HMyqUkkBavIif/view?usp=sharing)
+
+[Demo Video](https://drive.google.com/file/d/1A6KHs15bkuKdHe4uKp_5mhUhUSxP4zCo/view?usp=sharing)

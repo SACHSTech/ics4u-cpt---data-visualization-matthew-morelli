@@ -53,6 +53,7 @@ public class Main extends Application {
 
         ObservableList<University> tableViewData = FXCollections.observableArrayList();
 
+        // add the row values
         for (int i = 0; i < universityList.dataSet.size(); i++) {
             String[] rowData = {
                 String.valueOf(universityList.selectionSortUniversities(universityList.dataSet, parameter, false).get(i).getWorldRank()),
@@ -74,6 +75,7 @@ public class Main extends Application {
         TableView tableView = new TableView();
         tableView.setItems(tableViewData);
 
+        // add the column headers
         for (int i = 0; i < propertyValues.length; i++) {
             TableColumn theColumn = new TableColumn();
             theColumn.setText(propertyValues[i]);
@@ -99,6 +101,7 @@ public class Main extends Application {
 
         ObservableList<University> tableViewData = FXCollections.observableArrayList();
 
+        // add the row values
         for (int i = 0; i < universityList.linearSearch(column, parameter).size(); i++) {
             String[] rowData = {
                 String.valueOf(universityList.linearSearch(column, parameter).get(i).getWorldRank()),
@@ -120,6 +123,7 @@ public class Main extends Application {
         TableView tableView = new TableView();
         tableView.setItems(tableViewData);
 
+        // add the column headers
         for (int i = 0; i < propertyValues.length; i++) {
             TableColumn theColumn = new TableColumn();
             theColumn.setText(propertyValues[i]);
@@ -130,36 +134,6 @@ public class Main extends Application {
         return tableView;
 
     }
-    /*
-    public TableView createSummaryTableView(String[] propertyValues, UniversityList universityList) {
-
-        ObservableList<String> tableViewData = FXCollections.observableArrayList();
-        String[] rowHeaders = {"Max/Min", "Average", "Median", "Standard Deviation"};
-
-        for (int i = 0; i < propertyValues.length; i++) {
-    
-            tableViewData.add(propertyValues[i]);
-            tableViewData.add(universityList.getMaxMin(propertyValues[i]));
-            tableViewData.add(String.valueOf(universityList.getAverage(propertyValues[i])));
-            tableViewData.add(String.valueOf(universityList.getMedian(propertyValues[i])));
-            tableViewData.add(String.valueOf(universityList.getStandardDeviation(propertyValues[i])));
-
-        }
-
-        TableView tableView = new TableView();
-        tableView.setItems(tableViewData);
-
-        for (int i = 0; i < rowHeaders.length; i++) {
-            TableColumn theColumn = new TableColumn();
-            theColumn.setText(rowHeaders[i]);
-            theColumn.setCellValueFactory(new PropertyValueFactory(rowHeaders[i]));
-            tableView.getColumns().add(theColumn);
-            
-        }
-
-        return tableView;
-
-    }*/
 
     /**
      * Creates the vertical box containing all the labels for different information about the data
@@ -317,6 +291,8 @@ public class Main extends Application {
             citations,
             incomeLabel,
             income,
+            totalScoreLabel,
+            totalScore,
             numStudentsLabel,
             numStudents,
             ssrLabel,
@@ -353,7 +329,7 @@ public class Main extends Application {
 
         ScatterChart scatterChart = new ScatterChart(xAxis, yAxis);
 
-        for (int i = 0; i < 10; i++) {
+        for (int i = 0; i < 19; i++) {
             XYChart.Series scatterChartData = new XYChart.Series();
             scatterChartData.setName(universityList.dataSet.get(i).getName());
             scatterChartData.getData().add(new XYChart.Data(universityList.dataSet.get(i).getNumStudents(), universityList.dataSet.get(i).getTotalScore()));
@@ -432,22 +408,13 @@ public class Main extends Application {
         Tab tab5 = new Tab();
         tab5.setText("Summary");
 
-        String[] summaryPropertyValues = {"teaching", "international", "research", "citations", "income", "totalScore", "numStudents", "studentStaffRatio", "internationalStudents"};
-
-        //TableView summaryTableView = createSummaryTableView(summaryPropertyValues, universityList);
-        /*
-        Label count = new Label("Count: " + universityList.getCount());
-        Label maxMin = new Label(universityList.getMaxMin("teaching"));
-        Label average = new Label("Average: " + universityList.getAverage("teaching"));
-        Label median = new Label("Median: " + universityList.getMedian("teaching"));
-        Label sd = new Label("Standard Deviation: " + universityList.getStandardDeviation("teaching"));*/
-
         VBox tab5_vBox = new VBox();
         tab5_vBox.getChildren().addAll(
             createLabels(universityList)
         );
         tab5.setContent(tab5_vBox);
 
+        // add all the tabs to the tab pane
         tabPane.getTabs().add(tab1);
         tabPane.getTabs().add(tab2);
         tabPane.getTabs().add(tab3);

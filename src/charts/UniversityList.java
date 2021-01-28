@@ -73,9 +73,6 @@ public class UniversityList {
                     arrList.set(i, temp);
 
                 }
-            
-
-
 
             }
 
@@ -107,6 +104,12 @@ public class UniversityList {
         return arrList;
    }
 
+   /**
+    * Gets the number of universities in the data set
+    *
+    * @return  The number of universities
+    * @author Matthew Morelli
+    */
    public int getCount() {
        int count = 0;
        for (int i = 0; i < dataSet.size(); i++) {
@@ -115,6 +118,13 @@ public class UniversityList {
        return count;
    }
 
+   /**
+    * Gets the maximum and minimum value for a specified column
+    *
+    * @param parameter  The column to be analyzed
+    * @return The max and min number in that column
+    * @author Matthew Morelli
+    */
    public String getMaxMin(String parameter) {
        int count = 0;
        for (int i = 0; i < dataSet.size(); i++) {
@@ -123,6 +133,12 @@ public class UniversityList {
        return "Min: " + String.valueOf(selectionSortUniversities(dataSet, parameter, false).get(0).getParamater(parameter)) + ", Max: " + String.valueOf(selectionSortUniversities(dataSet, parameter, false).get(count - 1).getParamater(parameter));
    }
 
+   /**
+    * Gets the average values of a specified column
+    * @param parameter  The column to be analyzed
+    * @return The average of the column
+    * @author Matthew Morelli
+    */
    public double getAverage(String parameter) {
        double total = 0;
        int count = 0;
@@ -135,6 +151,13 @@ public class UniversityList {
        return average;
    }
    
+   /**
+    * Gets the median of the specified column
+    *
+    * @param parameter  The column to be analyzed
+    * @return The median of the column
+    * @author Matthew Morelli
+    */
    public double getMedian(String parameter) {
        int middleNum = (selectionSortUniversities(dataSet, parameter, false).size()) / 2;
        double left = 0;
@@ -148,6 +171,13 @@ public class UniversityList {
        }
    }
 
+   /**
+    * Gets the standard deviation of the specified column
+    *
+    * @param parameter  The column to be analyzed
+    * @return The standard deviation of that column
+    * @author Matthew Morelli
+    */
    public double getStandardDeviation(String parameter) {
        double mean = getAverage(parameter);
        double newMean = 0;
